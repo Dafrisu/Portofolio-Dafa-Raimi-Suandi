@@ -668,6 +668,7 @@
             background: var(--bg-surface);
             transition: border-color var(--transition);
             position: relative;
+            cursor: pointer;
         }
 
         .screenshot-item:hover {
@@ -711,6 +712,95 @@
             color: var(--text);
             background: linear-gradient(to top, rgba(26, 18, 16, .85) 0%, transparent 100%);
             pointer-events: none;
+        }
+
+        /* ── Lightbox ──────────────────────────────────── */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(10, 6, 4, .88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .3s ease, visibility .3s ease;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 85vw;
+            max-height: 85vh;
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border-hover);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, .6), 0 0 60px rgba(232, 135, 58, .08);
+            transform: scale(.92);
+            transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+            cursor: default;
+        }
+
+        .lightbox-overlay.active .lightbox-content {
+            transform: scale(1);
+        }
+
+        .lightbox-content img {
+            display: block;
+            max-width: 85vw;
+            max-height: 80vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: .75rem 1rem;
+            font-size: .85rem;
+            color: var(--text);
+            background: linear-gradient(to top, rgba(26, 18, 16, .92) 0%, transparent 100%);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border-hover);
+            background: rgba(26, 18, 16, .7);
+            backdrop-filter: blur(8px);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background var(--transition), border-color var(--transition);
+            z-index: 10001;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(232, 135, 58, .25);
+            border-color: var(--accent);
+        }
+
+        .lightbox-close svg {
+            width: 18px;
+            height: 18px;
         }
 
         /* ── Fade-in animation ─────────────────────────── */
@@ -1325,6 +1415,20 @@
         <p>&copy; 2026 YourName. Built with care.</p>
     </footer>
 
+    <!-- ═══ LIGHTBOX ═══ -->
+    <div class="lightbox-overlay" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+        <div class="lightbox-content" id="lightboxContent">
+            <img id="lightboxImg" src="" alt="">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+    </div>
+
     <!-- ═══ SCRIPTS ═══ -->
     <script>
         // Scroll fade-in
@@ -1359,6 +1463,41 @@
                 card.style.transform = '';
             }
         }
+        // Screenshot lightbox
+        const overlay = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        const lightboxContent = document.getElementById('lightboxContent');
+        const lightboxClose = document.getElementById('lightboxClose');
+
+        document.querySelectorAll('.screenshot-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                if (!img) return; // skip placeholders
+                const caption = item.querySelector('.screenshot-caption');
+
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+                lightboxCaption.textContent = caption ? caption.textContent : '';
+                lightboxCaption.style.display = caption ? '' : 'none';
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close lightbox
+        function closeLightbox() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        overlay.addEventListener('click', (e) => {
+            if (!lightboxContent.contains(e.target)) closeLightbox();
+        });
+        lightboxClose.addEventListener('click', closeLightbox);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
     </script>
 
 </body>
