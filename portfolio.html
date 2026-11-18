@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ── Reset & Base ──────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Warm palette */
+            --bg: #1a1210;
+            --bg-surface: #241c18;
+            --bg-card: #2e241e;
+            --bg-card-hover: #3a2e26;
+            --accent: #e8873a;
+            --accent-soft: #d4723a;
+            --accent-glow: rgba(232, 135, 58, .15);
+            --text: #f5ece4;
+            --text-muted: #b5a99a;
+            --text-dim: #8a7e72;
+            --border: rgba(232, 135, 58, .12);
+            --border-hover: rgba(232, 135, 58, .30);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, .35);
+            --transition: .3s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Noise texture overlay ─────────────────────── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: .035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            z-index: 9999;
+        }
+
+        /* ── Navigation ────────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.25rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(16px) saturate(1.4);
+            -webkit-backdrop-filter: blur(16px) saturate(1.4);
+            background: rgba(26, 18, 16, .72);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: -.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: .875rem;
+            font-weight: 500;
+            letter-spacing: .03em;
+            text-transform: uppercase;
+            transition: color var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* ── Hero ───────────────────────────────────────── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Warm radial glow behind hero */
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(232, 135, 58, .12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -55%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .45rem 1.1rem;
+            background: var(--accent-glow);
+            border: 1px solid var(--border-hover);
+            border-radius: 999px;
+            font-size: .8rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .hero-badge .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .4;
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 6vw, 5.2rem);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -.03em;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent), #f4a261, #e76f51);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            max-width: 540px;
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .85rem 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+            color: var(--bg);
+            font-weight: 600;
+            font-size: .95rem;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform var(--transition), box-shadow var(--transition);
+            box-shadow: 0 4px 20px rgba(232, 135, 58, .30);
+            position: relative;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(232, 135, 58, .40);
+        }
+
+        .hero-cta svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .5rem;
+            color: var(--text-dim);
+            font-size: .75rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(6px);
+            }
+        }
+
+        .scroll-hint svg {
+            width: 20px;
+            height: 20px;
+            opacity: .5;
+        }
+
+        /* ── Section shared styles ─────────────────────── */
+        section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: .75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .15em;
+            color: var(--accent);
+            margin-bottom: .75rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: -.02em;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            color: var(--text-muted);
+            margin-bottom: 3.5rem;
+            font-size: 1.05rem;
+        }
+
+        /* ── Contributions Grid ────────────────────────── */
+        .contributions-grid {
+            display: grid;
+            grid-template-rows: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition), background var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, rgba(232, 135, 58, .06) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow), 0 0 40px rgba(232, 135, 58, .06);
+            background: var(--bg-card-hover);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            background: var(--accent-glow);
+            border: 1px solid var(--border-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .card-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+
+        .card-tag {
+            margin-left: auto;
+            font-size: .7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            padding: .25rem .65rem;
+            border-radius: 999px;
+            background: var(--accent-glow);
+            color: var(--accent);
+            border: 1px solid var(--border);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: -.01em;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: .9rem;
+            line-height: 1.65;
+            flex-grow: 1;
+        }
+
+        .card-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
+            margin-top: .25rem;
+        }
+
+        .card-tech span {
+            font-size: .72rem;
+            font-weight: 500;
+            padding: .3rem .65rem;
+            border-radius: 999px;
+            background: rgba(245, 236, 228, .06);
+            color: var(--text-dim);
+            border: 1px solid rgba(245, 236, 228, .06);
+        }
+
+
+
+        /* ── About / Stats strip ───────────────────────── */
+        .stats-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: border-color var(--transition), transform var(--transition);
+        }
+
+        .stat:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: .78rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-top: .35rem;
+        }
+
+        /* ── Contact ───────────────────────────────────── */
+        .contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .75rem 1.4rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: .88rem;
+            font-weight: 500;
+            transition: border-color var(--transition), background var(--transition), transform var(--transition);
+        }
+
+        .contact-link:hover {
+            border-color: var(--border-hover);
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+        }
+
+        .contact-link svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent);
+        }
+
+        /* ── Footer ────────────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-dim);
+            font-size: .8rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── Responsive ────────────────────────────────── */
+        @media (max-width: 640px) {
+            nav {
+                padding: 1rem 1.25rem;
+            }
+
+            .nav-links {
+                gap: 1.2rem;
+            }
+
+            .nav-links a {
+                font-size: .78rem;
+            }
+
+            section {
+                padding: 4rem 1.25rem;
+            }
+
+            .contributions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── Profile Image ─────────────────────────────── */
+        .profile-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -.01em;
+        }
+
+        .profile-frame {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            flex-shrink: 0;
+        }
+
+        .profile-frame::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #f4a261, #e76f51, var(--accent-soft));
+            z-index: 0;
+            animation: rotate-border 6s linear infinite;
+        }
+
+        @keyframes rotate-border {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .profile-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: var(--bg);
+            z-index: 1;
+        }
+
+        .profile-frame img {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-placeholder {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+        }
+
+        .profile-placeholder svg {
+            width: 56px;
+            height: 56px;
+        }
+
+        /* Warm glow behind profile */
+        .profile-glow {
+            position: absolute;
+            inset: -30px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(232, 135, 58, .18) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ── Screenshot Dropdown ──────────────────────── */
+        .card-dropdown-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: .5rem;
+            font-size: .8rem;
+            font-weight: 500;
+            color: var(--accent);
+            background: var(--accent-glow);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: .6rem 1rem;
+            cursor: pointer;
+            margin-top: .5rem;
+            transition: border-color var(--transition), background var(--transition);
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-dropdown-toggle:hover {
+            border-color: var(--border-hover);
+            background: rgba(232, 135, 58, .22);
+        }
+
+        .card-dropdown-toggle .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+        }
+
+        .card-dropdown-toggle .toggle-label svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        .card-dropdown-toggle .chevron {
+            width: 16px;
+            height: 16px;
+            transition: transform var(--transition);
+            flex-shrink: 0;
+        }
+
+        .card-dropdown-toggle.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        .card-screenshots {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .4s cubic-bezier(.4, 0, .2, 1), margin .3s ease, opacity .3s ease;
+            opacity: 0;
+            margin-top: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-screenshots.open {
+            opacity: 1;
+            margin-top: .75rem;
+        }
+
+        .screenshots-inner {
+            display: flex;
+            flex-direction: row;
+            gap: .6rem;
+        }
+
+        .screenshot-item {
+            flex: 1 1 0;
+            min-width: 0;
+            height: 120px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--bg-surface);
+            transition: border-color var(--transition);
+            position: relative;
+        }
+
+        .screenshot-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .screenshot-item img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        .screenshot-placeholder {
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .4rem;
+            color: var(--text-dim);
+            font-size: .75rem;
+        }
+
+        .screenshot-placeholder svg {
+            width: 28px;
+            height: 28px;
+            opacity: .4;
+        }
+
+        .screenshot-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: .4rem .65rem;
+            font-size: .7rem;
+            color: var(--text);
+            background: linear-gradient(to top, rgba(26, 18, 16, .85) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        /* ── Fade-in animation ─────────────────────────── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ═══ NAVIGATION ═══ -->
+    <nav>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#contributions">Work</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero">
+        <!-- Profile Image Frame -->
+        <div class="profile-wrapper">
+            <div class="profile-frame">
+                <div class="profile-glow"></div>
+                <!-- Replace the placeholder below with your photo: -->
+                <img src="abu 4 x 6.jpg.jpeg" alt="Your Name">
+                <!-- <div class="profile-placeholder">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                </div> -->
+            </div>
+            <span class="profile-name">Dafa Raimi Suandi</span>
+        </div>
+
+        <span class="hero-badge"><span class="dot"></span> Open to opportunities</span>
+        <h1>Crafting Digital<br><span class="highlight">Experiences</span></h1>
+        <p>A Software Engineer passionate about building thoughtful, impactful software. Here's a selection of
+            contributions I'm
+            proud of.</p>
+        <a href="#contributions" class="hero-cta">
+            View Work
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+            </svg>
+        </a>
+        <div class="scroll-hint">
+            Scroll
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- ═══ ABOUT / STATS ═══ -->
+    <section id="about" class="fade-in">
+        <span class="section-label">About</span>
+        <h2 class="section-title">A little about me</h2>
+        <p class="section-desc">
+            I am a Software Engineer who enjoys building software and solving real-world problems through technology. My
+            background includes developing web and mobile applications, working on both frontend and backend
+            development, and designing solutions that align with business needs.
+
+            I also find it exciting to explore new technologies, experiment with different approaches, and find creative
+            ways to solve problems and turn ideas into working solutions.
+        </p>
+        <div class="stats-strip">
+            <div class="stat">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">2 Years</div>
+                <div class="stat-label">Years Exp</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CONTRIBUTIONS ═══ -->
+    <section id="contributions">
+        <span class="section-label">Contributions</span>
+        <h2 class="section-title">Selected Work</h2>
+        <p class="section-desc">Projects contributions I've been a part of.</p>
+
+        <div class="contributions-grid">
+
+            <!-- ── Card 1 ── -->
+            <article class="card fade-in">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 10.5V20.25h18V10.5M3 10.5l1.5-6h15l1.5 6M3 10.5a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M9 20.25v-6h6v6" />
+                        </svg>
+                    </div>
+                    <h3>Marketplace UMKMku</h3>
+                    <span class="card-tag">Tag</span>
+                </div>
+                <p>Succesfuly Developed both web application using Laravel and mobile application using Flutter for
+                    “UMKMku” platform main features and Helped gather all of the system requirements needed for
+                    the app</p>
+                <div class="card-tech">
+                    <span>Laravel</span>
+                    <span>Flutter</span>
+                    <span>PHP</span>
+                    <span>Javascript</span>
+                    <span>Dart</span>
+                </div>
+                <button class="card-dropdown-toggle" onclick="toggleScreenshots(this)">
+                    <span class="toggle-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                        Screenshots
+                    </span>
+                    <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+                <div class="card-screenshots">
+                    <div class="screenshots-inner">
+                        <!-- Screenshot 1 — replace placeholder with: <img src="screenshot.png" alt="Description"> -->
+                        <div class="screenshot-item">
+                            <img src="Fitur Keranjang.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Cart</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="Fitur Checkout.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Checkout</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="Fitur Tracking Pesanan.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Buyer Order progress Tracking</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="Web pesanan.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Order Management</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="Kelola Kurir.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Courier Management</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="Order History.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Order History</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── Card 2 ── -->
+            <article class="card fade-in">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125v-3.75" />
+                        </svg>
+                    </div>
+                    <h3>SMK 35 PGRI Information System</h3>
+                    <span class="card-tag">Tag</span>
+                </div>
+                <p>Developed an information system for student attendance CRUD data at SMK 35
+                    PGRI using the Laravel framework.</p>
+                <div class="card-tech">
+                    <span>Laravel</span>
+                    <span>Javascript</span>
+                    <span>PHP</span>
+                    <span>Microservice</span>
+                </div>
+                <button class="card-dropdown-toggle" onclick="toggleScreenshots(this)">
+                    <span class="toggle-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                        Screenshots
+                    </span>
+                    <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+                <div class="card-screenshots">
+                    <div class="screenshots-inner">
+                        <!-- Screenshot 1 — replace placeholder with: <img src="screenshot.png" alt="Description"> -->
+                        <div class="screenshot-item">
+                            <img src="Absensi Overview.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Absensi feature Overview</div>
+                        </div>
+                        <!-- Screenshot 2 -->
+                        <div class="screenshot-item">
+                            <img src="Input Date.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Add Absensi Date</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="Delete tanggal absensi.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Delete Absensi</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="Export Absensi.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Export Absensi</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── Card 3 ── -->
+            <article class="card fade-in">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                        </svg>
+                    </div>
+                    <h3>Financial Management System SMK 35 PGRI</h3>
+                    <span class="card-tag">Tag</span>
+                </div>
+                <p>Developed a financial system using Flutter, connected and integrated with the previously built
+                    information system.</p>
+                <div class="card-tech">
+                    <span>Flutter</span>
+                    <span>Dart</span>
+                    <span>PHP</span>
+                    <span>Microservice</span>
+                </div>
+                <button class="card-dropdown-toggle" onclick="toggleScreenshots(this)">
+                    <span class="toggle-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                        Screenshots
+                    </span>
+                    <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+                <div class="card-screenshots">
+                    <div class="screenshots-inner">
+                        <!-- Screenshot 1 — replace placeholder with: <img src="screenshot.png" alt="Description"> -->
+                        <div class="screenshot-item">
+                            <img src="Export Absensi.png" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">track students SPP payment</div>
+                        </div>
+                        <!-- Screenshot 2 -->
+                        <div class="screenshot-item">
+                            <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div>
+                            <div class="screenshot-caption">export SPP payment
+                            </div>
+                        </div>
+                        <div class="screenshot-item">
+                            <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div>
+                            <div class="screenshot-caption">Graph visualizations
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── Card 4 ── -->
+            <article class="card fade-in">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5a17.92 17.92 0 0 1-8.716-2.247m0 0A8.966 8.966 0 0 1 3 12c0-1.264.26-2.467.732-3.558" />
+                        </svg>
+                    </div>
+                    <h3>BTP Super App</h3>
+                    <span class="card-tag">Tag</span>
+                </div>
+                <p>Developed a super-app at BTP using the Laravel framework with a pre-designed boilerplate,
+                    and defined the business model for the Business Incubation Division and also built prototype for
+                    Business Incubation Module. Successfully mapped the Business Incubation Division’s business
+                    processes into flowcharts.
+                    Implemented an event feature for the business incubation program, tailored to each user role.
+                    Built attendance, assessment, feedback, and event scheduling features for each role.
+                    Developed role-specific dashboards.
+                    Created a super-admin module for the Business Incubation module.</p>
+                <div class="card-tech">
+                    <span>Laravel</span>
+                    <span>PHP</span>
+                    <span>Figma</span>
+                </div>
+                <button class="card-dropdown-toggle" onclick="toggleScreenshots(this)">
+                    <span class="toggle-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                        Screenshots
+                    </span>
+                    <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+                <div class="card-screenshots">
+                    <div class="screenshots-inner">
+                        <!-- Screenshot 1 — replace placeholder with: <img src="screenshot.png" alt="Description"> -->
+                        <div class="screenshot-item">
+                            <img src="" alt="Description">
+                            <!-- <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div> -->
+                            <div class="screenshot-caption">Event Features</div>
+                        </div>
+                        <!-- Screenshot 2 -->
+                        <div class="screenshot-item">
+                            <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div>
+                            <div class="screenshot-caption">Role specific features</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div>
+                            <div class="screenshot-caption">Super Admin Features</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── Card 5 ── -->
+            <article class="card fade-in">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                        </svg>
+                    </div>
+                    <h3>Boomgate Integration RTPintar</h3>
+                    <span class="card-tag">Tag</span>
+                </div>
+                <p>Brief description of what this project is about and your role or contribution.</p>
+                <div class="card-tech">
+                    <span>IOT</span>
+                    <span>Laravel</span>
+                    <span>PHP</span>
+                    <span>Vite</span>
+                    <span>Realtime System (Laravel Echo + Reverb)</span>
+                    <span>Websocket</span>
+                </div>
+                <button class="card-dropdown-toggle" onclick="toggleScreenshots(this)">
+                    <span class="toggle-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                        Screenshots
+                    </span>
+                    <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+                <div class="card-screenshots">
+                    <div class="screenshots-inner">
+                        <!-- Screenshot 1 — replace placeholder with: <img src="screenshot.png" alt="Description"> -->
+                        <div class="screenshot-item">
+                            <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div>
+                            <div class="screenshot-caption">Caption for screenshot</div>
+                        </div>
+                        <!-- Screenshot 2 -->
+                        <div class="screenshot-item">
+                            <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div>
+                            <div class="screenshot-caption">Caption for screenshot</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ── Card 6 ── -->
+            <article class="card fade-in">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                        </svg>
+                    </div>
+                    <h3>Project Title</h3>
+                    <span class="card-tag">Tag</span>
+                </div>
+                <p>Brief description of what this project is about and your role or contribution.</p>
+                <div class="card-tech">
+                    <span>Tech 1</span>
+                    <span>Tech 2</span>
+                    <span>Tech 3</span>
+                </div>
+                <button class="card-dropdown-toggle" onclick="toggleScreenshots(this)">
+                    <span class="toggle-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                        </svg>
+                        Screenshots
+                    </span>
+                    <svg class="chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+                <div class="card-screenshots">
+                    <div class="screenshots-inner">
+                        <!-- Screenshot 1 — replace placeholder with: <img src="screenshot.png" alt="Description"> -->
+                        <div class="screenshot-item">
+                            <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div>
+                            <div class="screenshot-caption">Caption for screenshot</div>
+                        </div>
+                        <!-- Screenshot 2 -->
+                        <div class="screenshot-item">
+                            <div class="screenshot-placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Add screenshot
+                            </div>
+                            <div class="screenshot-caption">Caption for screenshot</div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ═══ CONTACT ═══ -->
+    <section id="contact" class="fade-in">
+        <span class="section-label">Contact</span>
+        <h2 class="section-title">Let's connect</h2>
+        <p class="section-desc">Feel free to reach out for collaborations, questions, or just to say hello.</p>
+        <div class="contact-row">
+            <a href="mailto:you@example.com" class="contact-link">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                </svg>
+                Email
+            </a>
+            <a href="#" class="contact-link">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                </svg>
+                GitHub
+            </a>
+            <a href="#" class="contact-link">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+                </svg>
+                LinkedIn
+            </a>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+        <p>&copy; 2026 YourName. Built with care.</p>
+    </footer>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script>
+        // Scroll fade-in
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Screenshot dropdown toggle
+        function toggleScreenshots(btn) {
+            const panel = btn.nextElementSibling;
+            const isOpen = btn.classList.toggle('open');
+            panel.classList.toggle('open', isOpen);
+
+            if (isOpen) {
+                // Measure content height and animate open
+                panel.style.maxHeight = panel.scrollHeight + 'px';
+            } else {
+                panel.style.maxHeight = '0';
+            }
+
+            // Prevent card hover jump when dropdown is open
+            const card = btn.closest('.card');
+            if (isOpen) {
+                card.style.transform = 'none';
+            } else {
+                card.style.transform = '';
+            }
+        }
+    </script>
+
+</body>
+
+</html>
